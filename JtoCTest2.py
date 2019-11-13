@@ -36,11 +36,30 @@ for customer in TmpCustList.auto_paging_iter():
 	custDict['Date'] = DateTime
 	custDict['StripeID'] = str(customer.id)
 	custDict['Email'] = str(customer.email)
-	custDict['DrupalID'] = descr_dict['drupal_id']
-	custDict['DrupalName'] = descr_dict['drupal_name']
-	custDict['DrupalDisplayName'] = descr_dict['drupal_display_name']
-	custDict['DrupalLegalName'] = descr_dict['drupal_legal_name']
+	
+	if descr_dict['drupal_id']:
+		custDict['DrupalID'] = descr_dict['drupal_id']
+	else:
+		custDict['DrupalID'] = 'None'
+
+	if descr_dict['drupal_name']:
+                custDict['DrupalName'] = descr_dict['drupal_name']
+	else:
+                custDict['DrupalName'] = 'None'
+
+	if descr_dict.get('drupal_display_name','None') == 'None':
+		custDict['DrupalDisplayName'] = 'None'
+	else:
+		custDict['DrupalDisplayName'] = descr_dict['drupal_display_name']
+
+	if descr_dict.get('drupal_legal_name','None') == 'None':
+		custDict['DrupalLegalName'] = 'None'
+	else:
+		custDict['DrupalLegalName'] = descr_dict.get('drupal_legal_name','None')
+
+
 	custDict['IsMember'] = IsActive
+
 #	TODO: add in check for descr_dict exists
 	TotalCount += 1
 #	CustString = (',' + CustID + ',' + CustEmail + ',' + IsActive + '\n')
@@ -51,7 +70,7 @@ for customer in TmpCustList.auto_paging_iter():
 	#print(json.dumps(custDict))
 	print('working on line: ', TotalCount)
 	OutputFile.write(json.dumps(custDict))
-
+	OutputFile.write('\\n')
 
 #	for line in customer.readlines():
 #		if 'id' in line:
