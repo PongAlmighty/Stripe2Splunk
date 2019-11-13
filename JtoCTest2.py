@@ -3,13 +3,15 @@ import csv
 import stripe 
 import datetime
 import time
+import config
+
 from email import utils
 nowdt = datetime.datetime.now()
 nowtuple = nowdt.timetuple()
 nowtimestamp = time.mktime(nowtuple)
 DateTime = str(utils.formatdate(nowtimestamp))
 
-stripe.api_key = "rk_live_9PafxWPlkkh79N3rcI8jWWI0005332wEdl"
+stripe.api_key = config.apikey
 stripe.api_version = '2019-11-05'
 
 IsActive = ''
@@ -70,7 +72,7 @@ for customer in TmpCustList.auto_paging_iter():
 	#print(json.dumps(custDict))
 	print('working on line: ', TotalCount)
 	OutputFile.write(json.dumps(custDict))
-	OutputFile.write('\\n')
+	OutputFile.write("\n")
 
 #	for line in customer.readlines():
 #		if 'id' in line:
