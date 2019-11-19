@@ -16,9 +16,7 @@ stripe.api_version = '2019-11-05'
 
 IsActive = ''
 TotalCount = 0
-OutputFile = open("JtoCOut.txt", "w+")
-#print('StripeID, Email, DrupalID, DrupalDisName, DrupalName, DrupalLegName, IsActive')
-#OutputFile.write('StripeID, Email, DrupalID, DrupalDisName, DrupalName, DrupalLegName, IsActive\n')
+OutputFile = open("/opt/splunk/bin/scripts/JtoCOut.txt", "w+")
 
 TmpCustList = stripe.Customer.list(limit=100)
 for customer in TmpCustList.auto_paging_iter():
@@ -38,7 +36,11 @@ for customer in TmpCustList.auto_paging_iter():
 	custDict['Date'] = DateTime
 	custDict['StripeID'] = str(customer.id)
 	custDict['Email'] = str(customer.email)
-	
+
+
+	for Thing1 in customer.subscriptions.data:
+		custDict['PlanType'] = str(Thing1.plan.id)
+		custDict['PlanCreated'] = str(Thing1.plan.created)
 	if descr_dict['drupal_id']:
 		custDict['DrupalID'] = descr_dict['drupal_id']
 	else:
@@ -62,46 +64,12 @@ for customer in TmpCustList.auto_paging_iter():
 
 	custDict['IsMember'] = IsActive
 
-#	TODO: add in check for descr_dict exists
 	TotalCount += 1
-#	CustString = (',' + CustID + ',' + CustEmail + ',' + IsActive + '\n')
-#	print(CustString, 'Line Number: ', TotalCount)
-
-	#json.dumps(CustString)
-	#print(json.dumps(CustString))
-	#print(json.dumps(custDict))
-	print('working on line: ', TotalCount)
+	#print('working on line: ', TotalCount)
 	OutputFile.write(json.dumps(custDict))
 	OutputFile.write("\n")
 
-#	for line in customer.readlines():
-#		if 'id' in line:
-#		print(line)	
-
+print('Completed! Total lines: ', TotalCount)
 OutputFile.close()
 
-#read file
-#with open('StripeCustTemp.txt', 'r') as jsonfile:
-#  data=jsonfile.read()
-
-# parse file
-#jsonobj = json.loads(data)
-
-
-#for key in keylist[0]:
-#  if key in fieldsIWant :
-#    keylist.append(key)
-
-#f = csv.writer(open("test.csv", "w"))
-#f.writerow(keylist)
-
-#Iterate through each record in the JSON Array
-#for record in jsonobj:
-#Create placeholder to hold the data for the current record
-#  currentrecord = []
-#Iterate through each key in the keylist and add the data to our current record list
-#for key in keylist:
-#  currentrecord.append(record[key])
-#Write the current record as a line in our CSV
-#f.writerow(currentrecord)
 
