@@ -1,4 +1,4 @@
 #!/bin/bash
 #/opt/stripe customers list
-python3 JtoCTest2.py
-#cat JtoCOut.txt
+python3 /opt/splunk/bin/scripts/JtoCTest2.py
+#cat /opt/splunk/bin/scripts/JtoCOut.txt
